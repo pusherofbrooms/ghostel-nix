@@ -19,7 +19,7 @@ nix build .#ghostel
 
 ```nix
 {
-  inputs.ghostel-nix.url = "path:/Users/Jorgensen/ai/ghostel-nix";
+  inputs.ghostel-nix.url = "github:pusherofbrooms/ghostel-nix";
 
   outputs = { self, nixpkgs, ghostel-nix, ... }: {
     nixpkgs.overlays = [ ghostel-nix.overlays.default ];

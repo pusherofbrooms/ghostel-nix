@@ -1,0 +1,15 @@
+--- a/vendor/ghostty/pkg/apple-sdk/build.zig
++++ b/vendor/ghostty/pkg/apple-sdk/build.zig
+@@ -44,7 +44,11 @@
+         // Detect our SDK using the "findNative" Zig stdlib function.
+         // This is really important because it forces using `xcrun` to
+         // find the SDK path.
+-        const libc = try std.zig.LibCInstallation.findNative(.{
++        const libc: std.zig.LibCInstallation = if (b.graph.env_map.get("SDKROOT")) |sdk| .{
++            .include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++            .sys_include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++            .crt_dir = null,
++        } else try std.zig.LibCInstallation.findNative(.{
+             .allocator = b.allocator,
+             .target = &step.rootModuleTarget(),
+             .verbose = false,

@@ -1,0 +1,28 @@
+--- a/vendor/ghostty/src/build/SharedDeps.zig
++++ b/vendor/ghostty/src/build/SharedDeps.zig
+@@ -143,7 +143,11 @@
+             .optimize = optimize,
+         });
+         if (target.result.os.tag.isDarwin()) {
+-            const libc = try std.zig.LibCInstallation.findNative(.{
++            const libc: std.zig.LibCInstallation = if (b.graph.env_map.get("SDKROOT")) |sdk| .{
++                .include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++                .sys_include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++                .crt_dir = null,
++            } else try std.zig.LibCInstallation.findNative(.{
+                 .allocator = b.allocator,
+                 .target = &target.result,
+                 .verbose = false,
+@@ -166,7 +170,11 @@
+             });
+             switch (target.result.os.tag) {
+                 .macos => {
+-                    const libc = try std.zig.LibCInstallation.findNative(.{
++                    const libc: std.zig.LibCInstallation = if (b.graph.env_map.get("SDKROOT")) |sdk| .{
++                        .include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++                        .sys_include_dir = try std.fs.path.join(b.allocator, &.{ sdk, "usr", "include" }),
++                        .crt_dir = null,
++                    } else try std.zig.LibCInstallation.findNative(.{
+                         .allocator = b.allocator,
+                         .target = &target.result,
+                         .verbose = false,

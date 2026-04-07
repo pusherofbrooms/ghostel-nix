@@ -17,17 +17,30 @@ nix build .#ghostel
 
 ## Use as an overlay
 
+This overlay is intended to be used alongside
+[`emacs-overlay`](https://github.com/nix-community/emacs-overlay).
+Apply `emacs-overlay` first, then `ghostel-nix`.
+
 ```nix
 {
   inputs.ghostel-nix.url = "github:pusherofbrooms/ghostel-nix";
 
-  outputs = { self, nixpkgs, ghostel-nix, ... }: {
-    nixpkgs.overlays = [ ghostel-nix.overlays.default ];
+  outputs = { self, nixpkgs, emacs-overlay, ghostel-nix, ... }: {
+    nixpkgs.overlays = [
+      emacs-overlay.overlay
+      ghostel-nix.overlays.default
+    ];
   };
 }
 ```
 
-Then include it in your Emacs package set as `epkgs.ghostel`.
+Then include it in your Emacs package set as `epkgs.ghostel`, for example:
+
+```nix
+((emacsPackagesFor emacs-git).emacsWithPackages (epkgs: [
+  epkgs.ghostel
+]))
+```
 
 ## Notes
 

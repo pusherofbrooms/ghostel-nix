@@ -19,6 +19,10 @@
         let
           pname = "ghostel";
           version = "unstable";
+          ghosttyZigDeps = final.callPackage "${ghostel-src}/vendor/ghostty/build.zig.zon.nix" {
+            name = "ghostty-zig-deps-${version}";
+            zig_0_15 = final.zig_0_15;
+          };
           buildGhostel = epkgs:
             epkgs.trivialBuild {
               inherit pname version;
@@ -26,7 +30,8 @@
               packageRequires = [ ];
 
               nativeBuildInputs = with final; [
-                zig
+                bash
+                zig_0_15
               ] ++ lib.optionals final.stdenv.hostPlatform.isDarwin [
                 apple-sdk
                 cctools
@@ -42,10 +47,15 @@
                 export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-global-cache"
                 export ZIG_LOCAL_CACHE_DIR="$TMPDIR/zig-local-cache"
                 export EMACS_INCLUDE_DIR="${epkgs.emacs}/include"
+                export GHOSTTY_ZIG_SYSTEM="${ghosttyZigDeps}"
+
+                substituteInPlace build.sh \
+                  --replace-fail 'zig build -Demit-lib-vt=true -Doptimize=ReleaseFast $ZIG_TARGET_FLAG' 'zig build --system "$GHOSTTY_ZIG_SYSTEM" -Demit-lib-vt=true -Doptimize=ReleaseFast $ZIG_TARGET_FLAG' \
+                  --replace-fail 'zig build -Demit-lib-vt=true -Doptimize=ReleaseFast' 'zig build --system "$GHOSTTY_ZIG_SYSTEM" -Demit-lib-vt=true -Doptimize=ReleaseFast'
               '' + lib.optionalString final.stdenv.hostPlatform.isDarwin ''
                 export SDKROOT="${final.apple-sdk.sdkroot}"
               '' + ''
-                ./build.sh
+                ${final.bash}/bin/bash ./build.sh
               '';
 
               postInstall = ''

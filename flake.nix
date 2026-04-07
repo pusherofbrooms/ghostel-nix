@@ -49,7 +49,7 @@
               '';
 
               postInstall = ''
-                module_dir="$out/share/emacs/site-lisp/elpa/${pname}-${version}"
+                module_dir="$out/share/emacs/site-lisp/"
                 mkdir -p "$module_dir"
                 if [ -f ghostel-module.so ]; then
                   cp ghostel-module.so "$module_dir/"

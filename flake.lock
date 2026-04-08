@@ -3,11 +3,11 @@
     "ghostel-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1775565509,
-        "narHash": "sha256-BwAgMkDlxuEKVSzb3gh3WKRA9RVcSh5VeogJhZljwfQ=",
+        "lastModified": 1775644783,
+        "narHash": "sha256-6FE9QFVDHUv3mBp9HHs1R+oTBS05p96oxLzirenbKFI=",
         "ref": "refs/heads/main",
-        "rev": "85b3e5f5a3a3c79cbf219e81f2f9c6decf1a4fbc",
-        "revCount": 146,
+        "rev": "907da53e0f4feb8f1ca766552a09fe54f2bfaa1d",
+        "revCount": 151,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/dakra/ghostel"
